@@ -22,61 +22,68 @@ export default function GiftModal({
 
   useEffect(() => {
     if (!open) return;
-    // reset small bits each open so it feels fresh
+  
+    const checkVideoStatus = () => {
+      if (!videoUrl) {
+        setVideoStepDone(true);
+        return;
+      }
+  
+      if (!userUid || !item?.id) {
+        setVideoStepDone(false);
+        return;
+      }
+  
+      try {
+        const doneKey = `ffg_video_done_${userUid}`;
+        const pendingKey = `ffg_video_pending_${userUid}`;
+  
+        const pending = localStorage.getItem(pendingKey) === "1";
+  
+        if (pending) {
+          localStorage.setItem(doneKey, "1");
+          localStorage.removeItem(pendingKey);
+          setVideoStepDone(true);
+          return;
+        }
+  
+        const returnItemId = localStorage.getItem(
+          "ffg_video_return_open_item_id"
+        );
+  
+        const returnUserUid = localStorage.getItem(
+          "ffg_video_return_open_user_uid"
+        );
+  
+        if (
+          returnItemId &&
+          returnUserUid &&
+          String(returnUserUid) === String(userUid) &&
+          String(returnItemId) === String(item.id)
+        ) {
+          localStorage.setItem(doneKey, "1");
+  
+          localStorage.removeItem("ffg_video_return_open_item_id");
+          localStorage.removeItem("ffg_video_return_open_user_uid");
+  
+          setVideoStepDone(true);
+          return;
+        }
+  
+        setVideoStepDone(localStorage.getItem(doneKey) === "1");
+      } catch {
+        setVideoStepDone(false);
+      }
+    };
+  
+    // reset UI state
     setTargetUid("");
     setQuantity(1);
     setCoupon("none");
     setGiftStatus("idle");
-
-    // Determine video step status per logged-in user.
-    if (!videoUrl) {
-      setVideoStepDone(true);
-      return;
-    }
-    if (!userUid) {
-      setVideoStepDone(false);
-      return;
-    }
-    try {
-      const doneKey = `ffg_video_done_${userUid}`;
-      const pendingKey = `ffg_video_pending_${userUid}`;
-
-      const pending = localStorage.getItem(pendingKey) === "1";
-      if (pending) {
-        localStorage.setItem(doneKey, "1");
-        localStorage.removeItem(pendingKey);
-        setVideoStepDone(true);
-        return;
-      }
-
-      // Fallback: if we redirected back and saved return keys,
-      // unlock for the same selected item.
-      const returnItemId = localStorage.getItem(
-        "ffg_video_return_open_item_id",
-      );
-      const returnUserUid = localStorage.getItem(
-        "ffg_video_return_open_user_uid",
-      );
-      const itemId = item?.id ?? "";
-
-      if (
-        returnItemId &&
-        returnUserUid &&
-        String(returnUserUid) === String(userUid) &&
-        String(returnItemId) === String(itemId)
-      ) {
-        localStorage.setItem(doneKey, "1");
-        localStorage.removeItem("ffg_video_return_open_item_id");
-        localStorage.removeItem("ffg_video_return_open_user_uid");
-        setVideoStepDone(true);
-        return;
-      }
-
-      setVideoStepDone(localStorage.getItem(doneKey) === "1");
-    } catch {
-      setVideoStepDone(false);
-    }
-  }, [open, userUid, videoUrl, item?.id]);
+  
+    checkVideoStatus();
+  }, [open, userUid, videoUrl, item]);
 
   const pricing = useMemo(() => {
     const original = (item?.pricePerGift ?? 1000) * quantity;
