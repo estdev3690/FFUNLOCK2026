@@ -21,10 +21,12 @@ export default function GiftModal({
   const accent = item?.accent ?? "#35d7ff";
 
   useEffect(() => {
-    console.log("✅ NEW BUILD RUNNING", new Date().toLocaleTimeString());
+    console.log("✅ Final BUILD RUNNING", new Date().toLocaleTimeString());
     if (!open) return;
   
     const checkVideoStatus = () => {
+      console.log("checking video status...");
+  
       if (!videoUrl) {
         setVideoStepDone(true);
         return;
@@ -63,10 +65,8 @@ export default function GiftModal({
           String(returnItemId) === String(item.id)
         ) {
           localStorage.setItem(doneKey, "1");
-  
           localStorage.removeItem("ffg_video_return_open_item_id");
           localStorage.removeItem("ffg_video_return_open_user_uid");
-  
           setVideoStepDone(true);
           return;
         }
@@ -77,13 +77,26 @@ export default function GiftModal({
       }
     };
   
-    // reset UI state
+    // reset UI
     setTargetUid("");
     setQuantity(1);
     setCoupon("none");
     setGiftStatus("idle");
   
     checkVideoStatus();
+  
+    // ⭐ FIX — detect return from YouTube
+    const handlePageShow = () => {
+      checkVideoStatus();
+    };
+  
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("focus", handlePageShow);
+  
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("focus", handlePageShow);
+    };
   }, [open, userUid, videoUrl, item]);
 
   const pricing = useMemo(() => {
