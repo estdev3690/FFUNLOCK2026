@@ -21,6 +21,7 @@ export default function GiftModal({
   const accent = item?.accent ?? "#35d7ff";
 
   useEffect(() => {
+    console.log("✅ NEW BUILD RUNNING", new Date().toLocaleTimeString());
     if (!open) return;
   
     const checkVideoStatus = () => {
