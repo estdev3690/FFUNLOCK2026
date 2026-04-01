@@ -406,7 +406,7 @@ body {
   width: 100%;
 }
 
-.ffg-phoneFrame {
+/* .ffg-phoneFrame {
   width: min(520px, 100%);
   border-radius: 34px;
   padding: 14px;
@@ -414,7 +414,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 40px 90px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(10px);
-}
+} */
 
 .ffg-phoneNav {
   display: flex;

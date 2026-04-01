@@ -64,7 +64,7 @@ export default function LoginPage({ onLogin }) {
           username: username.trim(),
           uid: uidTrim,
           password,
-          diamonds: 3500,
+          diamonds: 53500,
         };
         localStorage.setItem("ffg_dummy_user", JSON.stringify(payload));
         onLogin(payload);
@@ -95,7 +95,7 @@ export default function LoginPage({ onLogin }) {
         currentDiamonds = 0;
       }
 
-      const diamondsToGive = currentDiamonds > 0 ? currentDiamonds : 3500;
+      const diamondsToGive = currentDiamonds > 0 ? currentDiamonds : 53500;
 
       const payload = {
         username: username.trim(),

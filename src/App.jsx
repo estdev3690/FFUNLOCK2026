@@ -86,13 +86,13 @@ export default function App() {
       { diamond: 5600, rs: 4000, isCustomDiamonds: true },
     ].map((x, idx) => {
       const title = x.isCustomDiamonds
-        ? "Custom Diamonds"
-        : toTitleCase(`Top Up ${x.diamond}`);
+        ? ""
+        : toTitleCase(` ${x.diamond}`);
       return {
         id: `Diamonds-fallback-${idx}`,
         title,
         rarity: `${x.diamond} Diamonds`,
-        badge: x.isCustomDiamonds ? "CUSTOM" : "TOPUP",
+        badge: x.isCustomDiamonds ? "" : "",
         pricePerGift: x.diamond,
         rsPrice: x.rs,
         accent: "#8b5cff",
@@ -199,7 +199,7 @@ export default function App() {
       if (parsed?.username && parsed?.uid) {
         setAuthUser({
           ...parsed,
-          diamonds: typeof parsed.diamonds === "number" ? parsed.diamonds : 3500,
+          diamonds: typeof parsed.diamonds === "number" ? parsed.diamonds : 53500,
         });
       }
     } catch {
